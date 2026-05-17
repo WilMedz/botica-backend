@@ -1,0 +1,23 @@
+[33mcommit 131c09656db6363621c5b66ee02bccca2ec12d6d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Santiago Lumba <santiago321lumbarojas456@gmail.com>
+Date:   Tue May 5 15:05:34 2026 -0500
+
+    Se agrego las dependencias de JPA y de MySQL
+
+[33mcommit 46b975d7e97213f37b58ac857a5b958a1491eea6[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Santiago Lumba <santiago321lumbarojas456@gmail.com>
+Date:   Tue May 5 14:49:51 2026 -0500
+
+    Corrección del application.properties cambiar a MySQL
+
+[33mcommit b85049922fe2aba37cf90f6542a0f24a0370149c[m
+Author: Santiago Lumba <santiago321lumbarojas456@gmail.com>
+Date:   Tue May 5 14:40:51 2026 -0500
+
+    configuración de del archivo application.properties para la conexion con la base de datos y configuracion del puerto de ejecución (8181)
+
+[33mcommit e15129c8b7099396cf2e47452ab5d3737a1e8ce8[m
+Author: Santiago Lumba <santiago321lumbarojas456@gmail.com>
+Date:   Tue May 5 14:21:45 2026 -0500
+
+    Creacion del proyecto base
