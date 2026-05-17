@@ -1,13 +1,13 @@
 package com.SistemaWeb.Botica.service;
 
-import com.SistemaWeb.Botica.model.Producto;
+import com.SistemaWeb.Botica.dto.ProductoDTO;
 
 import java.util.List;
 
 public interface IProductoService {
-    Producto save(Producto producto) throws Exception;
-    Producto update(Producto producto, Integer id) throws Exception;
-    List<Producto> findAll() throws Exception;
-    Producto findById(Integer id) throws Exception;
+    ProductoDTO save(ProductoDTO dto) throws Exception;
+    ProductoDTO update(ProductoDTO dto, Integer id) throws Exception;
+    List<ProductoDTO> findAll() throws Exception;
+    ProductoDTO findById(Integer id) throws Exception;
     void delete(Integer id) throws Exception;
 }

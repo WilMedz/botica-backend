@@ -1,6 +1,6 @@
 package com.SistemaWeb.Botica.controller;
 
-import com.SistemaWeb.Botica.model.Producto;
+import com.SistemaWeb.Botica.dto.ProductoDTO;
 import com.SistemaWeb.Botica.service.IProductoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +15,23 @@ public class ProductoController {
     private final IProductoService service;
 
     @GetMapping
-    public List<Producto> findAll() throws Exception {
+    public List<ProductoDTO> findAll() throws Exception {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public Producto findById(@PathVariable("id") Integer id) throws Exception {
+    public ProductoDTO findById(@PathVariable("id") Integer id) throws Exception {
         return service.findById(id);
     }
 
     @PostMapping
-    public Producto save(@RequestBody Producto producto) throws Exception {
-        return service.save(producto);
+    public ProductoDTO save(@RequestBody ProductoDTO dto) throws Exception {
+        return service.save(dto);
     }
 
     @PutMapping("/{id}")
-    public Producto update(@RequestBody Producto producto, @PathVariable("id") Integer id) throws Exception {
-        return service.update(producto, id);
+    public ProductoDTO update(@RequestBody ProductoDTO dto, @PathVariable("id") Integer id) throws Exception {
+        return service.update(dto, id);
     }
 
     @DeleteMapping("/{id}")
