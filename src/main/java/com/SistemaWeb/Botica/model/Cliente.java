@@ -39,5 +39,5 @@ public class Cliente {
     private String email;
 
     @Column(nullable = false)
-    private boolean estado;
+    private Boolean estado;
 }

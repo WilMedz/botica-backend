@@ -49,7 +49,7 @@ public class Usuario implements UserDetails {
 	private String email;
 
 	@Column(nullable = false)
-	private boolean estado;
+	private Boolean estado;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_rol", nullable = false)

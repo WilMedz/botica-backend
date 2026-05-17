@@ -58,7 +58,7 @@ public class Producto {
 	private Proveedor proveedor;
 
 	@Column(nullable = false)
-	private boolean estado;
+	private Boolean estado;
 
 	@Column (nullable=true )
 	private LocalDate fechaVencimiento;

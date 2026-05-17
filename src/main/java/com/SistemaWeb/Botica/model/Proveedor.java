@@ -39,5 +39,5 @@ public class Proveedor {
 	private String email;
 
 	@Column(nullable = false)
-	private boolean estado;
+	private Boolean estado;
 }
