@@ -1,24 +1,23 @@
 package com.SistemaWeb.Botica.service.implementation;
 
-import com.SistemaWeb.Botica.model.Venta;
-import com.SistemaWeb.Botica.repository.IVentaRepository;
-import com.SistemaWeb.Botica.service.IVentaService;
+import com.SistemaWeb.Botica.model.Proveedor;
+import com.SistemaWeb.Botica.repository.IProveedorRepository;
+import com.SistemaWeb.Botica.service.IProveedorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VentaService implements IVentaService {
+public class VentaService extends GenericService<Venta,Integer> implements ICategoriaService {
     private final IVentaRepository repo;
 
     @Override
-    public Venta save(Venta venta) throws Exception {
-        return repo.save(venta);
+    public IGenericRepository<Venta,Integer>getRepo() {
+        return repo;
     }
 
-    @Override
+    /*@Override
     public Venta update(Venta venta, Integer id) throws Exception {
         venta.setIdVenta(id);
         return repo.save(venta);
@@ -37,5 +36,5 @@ public class VentaService implements IVentaService {
     @Override
     public void delete(Integer id) throws Exception {
         repo.deleteById(id);
-    }
+    }*/
 }

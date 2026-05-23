@@ -12,6 +12,12 @@ import java.util.List;
 public class ProveedorService implements IProveedorService {
     private final IProveedorRepository repo;
 
+    @Override 
+    protected IGenericRepository<Proveedor,Integer> getRepo(){
+        return repo;
+    }
+
+    /*
     @Override
     public Proveedor save(Proveedor proveedor) throws Exception {
         return repo.save(proveedor);
@@ -47,5 +53,5 @@ public class ProveedorService implements IProveedorService {
     public void delete(Integer id) throws Exception {
         Proveedor proveedor = findById(id); // lanza excepción si no existe
         repo.delete(proveedor);
-    }
+    }*/
 }
