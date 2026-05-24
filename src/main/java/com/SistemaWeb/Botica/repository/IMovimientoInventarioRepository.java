@@ -1,5 +1,7 @@
 package com.SistemaWeb.Botica.repository;
 
-public class IMovimientoInventario {
+import com.SistemaWeb.Botica.model.MovimientoInventario;
+
+public interface IMovimientoInventarioRepository extends IGenericRepository<MovimientoInventario, Integer> {
 
 }

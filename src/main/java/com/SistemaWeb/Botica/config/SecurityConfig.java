@@ -6,8 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityConfig {       //para desactivar la seguridad y permitir el acceso a todas las rutas sin autenticación (Spring Security)
-
+public class SecurityConfig {       //para desactivar la seguridad y permitir el acceso a todas las rutas sin autenticación 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

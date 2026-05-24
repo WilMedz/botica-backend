@@ -1,5 +1,7 @@
 package com.SistemaWeb.Botica.service;
 
-public class IDetalleVentaService {
+import com.SistemaWeb.Botica.model.DetalleVenta;
+
+public interface IDetalleVentaService extends IGenericService<DetalleVenta,Integer> {
 
 }

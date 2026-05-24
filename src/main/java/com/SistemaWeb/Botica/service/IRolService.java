@@ -1,5 +1,7 @@
 package com.SistemaWeb.Botica.service;
 
-public class IRolService {
+import com.SistemaWeb.Botica.model.Rol;
+
+public interface IRolService extends IGenericService<Rol,Integer> {
 
 }

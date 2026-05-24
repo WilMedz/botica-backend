@@ -1,5 +1,7 @@
 package com.SistemaWeb.Botica.repository;
 
-public class IDetalleVentaRepository {
+import com.SistemaWeb.Botica.model.DetalleVenta;
+
+public interface IDetalleVentaRepository extends IGenericRepository<DetalleVenta, Integer> {
 
 }

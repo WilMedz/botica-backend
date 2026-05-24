@@ -1,40 +1,19 @@
 package com.SistemaWeb.Botica.service.implementation;
 
-import com.SistemaWeb.Botica.model.Proveedor;
-import com.SistemaWeb.Botica.repository.IProveedorRepository;
-import com.SistemaWeb.Botica.service.IProveedorService;
+import com.SistemaWeb.Botica.model.Venta;
+import com.SistemaWeb.Botica.repository.IGenericRepository;
+import com.SistemaWeb.Botica.repository.IVentaRepository;
+import com.SistemaWeb.Botica.service.IVentaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VentaService extends GenericService<Venta,Integer> implements ICategoriaService {
+public class VentaService extends GenericService<Venta, Integer> implements IVentaService {
     private final IVentaRepository repo;
-
+    
     @Override
-    public IGenericRepository<Venta,Integer>getRepo() {
+    protected IGenericRepository<Venta, Integer> getRepo() {
         return repo;
     }
-
-    /*@Override
-    public Venta update(Venta venta, Integer id) throws Exception {
-        venta.setIdVenta(id);
-        return repo.save(venta);
-    }
-
-    @Override
-    public List<Venta> findAll() throws Exception {
-        return repo.findAll();
-    }
-
-    @Override
-    public Venta findById(Integer id) throws Exception {
-        return repo.findById(id).orElse(new Venta());
-    }
-
-    @Override
-    public void delete(Integer id) throws Exception {
-        repo.deleteById(id);
-    }*/
 }

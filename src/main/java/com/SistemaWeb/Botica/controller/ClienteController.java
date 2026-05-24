@@ -1,41 +1,52 @@
 package com.SistemaWeb.Botica.controller;
 
+import com.SistemaWeb.Botica.dto.ClienteDTO;
 import com.SistemaWeb.Botica.model.Cliente;
 import com.SistemaWeb.Botica.service.IClienteService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class ClienteController {
     private final IClienteService service;
+    private final ModelMapper modelMapper;
 
     @GetMapping
-    public List<Cliente> findAll() throws Exception {
-        return service.findAll();
+    public ResponseEntity<List<ClienteDTO>> findAll() throws Exception {
+        List<ClienteDTO> list = service.findAll().stream().map(e -> modelMapper.map(e, ClienteDTO.class)).toList();
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public Cliente findById(@PathVariable("id") Integer id) throws Exception {
-        return service.findById(id);
+    public ResponseEntity<ClienteDTO> findById(@PathVariable("id") Integer id) throws Exception {
+        Cliente obj = service.findById(id);
+        return ResponseEntity.ok(modelMapper.map(obj, ClienteDTO.class));
     }
 
     @PostMapping
-    public Cliente save(@RequestBody Cliente cliente) throws Exception {
-        return service.save(cliente);
+    public ResponseEntity<Void> save(@RequestBody ClienteDTO dto) throws Exception {
+        Cliente obj = service.save(modelMapper.map(dto, Cliente.class));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdCliente()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{id}")
-    public Cliente update(@RequestBody Cliente cliente, @PathVariable("id") Integer id) throws Exception {
-        return service.update(cliente, id);
+    public ResponseEntity<ClienteDTO> update(@RequestBody ClienteDTO dto,@PathVariable("id") Integer id) throws Exception {
+        Cliente obj = service.update(modelMapper.map(dto, Cliente.class), id);
+        return ResponseEntity.ok(modelMapper.map(obj, ClienteDTO.class));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws Exception {
         service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

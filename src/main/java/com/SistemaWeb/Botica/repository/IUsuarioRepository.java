@@ -1,5 +1,6 @@
 package com.SistemaWeb.Botica.repository;
 
-public class IUsuarioRepository {
+import com.SistemaWeb.Botica.model.Usuario;
 
+public interface IUsuarioRepository extends IGenericRepository<Usuario,Integer>{
 }
