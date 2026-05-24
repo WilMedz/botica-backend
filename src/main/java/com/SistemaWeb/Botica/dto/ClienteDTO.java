@@ -1,5 +1,4 @@
 package com.SistemaWeb.Botica.dto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,13 +6,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProveedorDTO {
 
-    private Integer idProveedor;
-    private String razonSocial;
-    private String ruc;
-    private String direccion;
+public class ClienteDTO {
+    private Integer idCliente;
+    private String nombre;
+    private String apellido;
+    private String documento;
     private String telefono;
     private String email;
-    private Boolean estado; 
+    private Boolean estado;
 }

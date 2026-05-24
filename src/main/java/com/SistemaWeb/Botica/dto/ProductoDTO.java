@@ -20,10 +20,8 @@ public class ProductoDTO {
     private BigDecimal precioVenta;
     private Integer stock;
     private Integer stockMinimo;
+    private Integer idCategoria;   // Solo ID, evita referencia circular
+    private Integer idProveedor;   // Solo ID, evita referencia circular
     private Boolean estado;
     private LocalDate fechaVencimiento;
-    private Integer idCategoria;
-    private String nombreCategoria;
-    private Integer idProveedor;
-    private String razonSocialProveedor; 
 }
