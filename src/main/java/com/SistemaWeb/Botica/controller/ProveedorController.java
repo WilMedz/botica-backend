@@ -20,6 +20,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/proveedores")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class ProveedorController {
 
