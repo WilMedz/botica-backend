@@ -5,6 +5,7 @@ import com.SistemaWeb.Botica.model.Categoria;
 import com.SistemaWeb.Botica.service.ICategoriaService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -12,41 +13,54 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/categorias")
 @RequiredArgsConstructor
-// @CrossOrigin(origins = { "http://localhost:4200","http://localhost:4201"})
 public class CategoriaController {
     private final ICategoriaService service;
     private final ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<CategoriaDTO>> findAll() throws Exception {
-        //List<Categoria> list = service.findAll();
-        //ModelMapper modelMapper = new ModelMapper();
-        //List<CategoriaDTO> list = service.findAll().stream().map(e -> new CategoriaDTO(e.getIdCategoria(), e.getNombre(), e.getDescripcion(), e.getEstado())).toList();
-        List<CategoriaDTO> list = service.findAll().stream().map(e -> modelMapper.map(e, CategoriaDTO.class)).toList();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<CollectionModel<CategoriaDTO>> findAll() {
+        List<CategoriaDTO> list = service.findAll().stream()
+                .map(e -> {
+                    CategoriaDTO dto = modelMapper.map(e, CategoriaDTO.class);
+                    dto.add(linkTo(methodOn(CategoriaController.class).findById(dto.getIdCategoria())).withSelfRel());
+                    return dto;
+                }).toList();
+
+        CollectionModel<CategoriaDTO> result = CollectionModel.of(list,
+                linkTo(methodOn(CategoriaController.class).findAll()).withSelfRel());
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> findById(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<CategoriaDTO> findById(@PathVariable("id") Integer id) {
         Categoria obj = service.findById(id);
-        return ResponseEntity.ok(modelMapper.map(obj, CategoriaDTO.class));
+        CategoriaDTO dto = modelMapper.map(obj, CategoriaDTO.class);
+        dto.add(linkTo(methodOn(CategoriaController.class).findById(id)).withSelfRel());
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody CategoriaDTO dto) throws Exception {
+    public ResponseEntity<CategoriaDTO> save(@RequestBody CategoriaDTO dto) throws Exception {
         Categoria obj = service.save(modelMapper.map(dto, Categoria.class));
-        // http://localhost:8181/categories/6
+        CategoriaDTO resultDto = modelMapper.map(obj, CategoriaDTO.class);
+        resultDto.add(linkTo(methodOn(CategoriaController.class).findById(resultDto.getIdCategoria())).withSelfRel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdCategoria()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(resultDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaDTO>  update(@RequestBody CategoriaDTO dto, @PathVariable("id") Integer id) throws Exception {
-         Categoria obj = service.update(modelMapper.map(dto, Categoria.class), id);
-         return ResponseEntity.ok(modelMapper.map(obj, CategoriaDTO.class));
+    public ResponseEntity<CategoriaDTO> update(@RequestBody CategoriaDTO dto, @PathVariable("id") Integer id) throws Exception {
+        Categoria obj = service.update(modelMapper.map(dto, Categoria.class), id);
+        CategoriaDTO resultDto = modelMapper.map(obj, CategoriaDTO.class);
+        resultDto.add(linkTo(methodOn(CategoriaController.class).findById(id)).withSelfRel());
+        return ResponseEntity.ok(resultDto);
     }
 
     @DeleteMapping("/{id}")
