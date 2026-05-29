@@ -5,12 +5,16 @@ import com.SistemaWeb.Botica.model.Cliente;
 import com.SistemaWeb.Botica.service.IClienteService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/clientes")
@@ -20,28 +24,43 @@ public class ClienteController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<ClienteDTO>> findAll() throws Exception {
-        List<ClienteDTO> list = service.findAll().stream().map(e -> modelMapper.map(e, ClienteDTO.class)).toList();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<CollectionModel<ClienteDTO>> findAll() {
+        List<ClienteDTO> list = service.findAll().stream()
+                .map(e -> {
+                    ClienteDTO dto = modelMapper.map(e, ClienteDTO.class);
+                    dto.add(linkTo(methodOn(ClienteController.class).findById(dto.getIdCliente())).withSelfRel());
+                    return dto;
+                }).toList();
+
+        CollectionModel<ClienteDTO> result = CollectionModel.of(list,
+                linkTo(methodOn(ClienteController.class).findAll()).withSelfRel());
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> findById(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<ClienteDTO> findById(@PathVariable("id") Integer id) {
         Cliente obj = service.findById(id);
-        return ResponseEntity.ok(modelMapper.map(obj, ClienteDTO.class));
+        ClienteDTO dto = modelMapper.map(obj, ClienteDTO.class);
+        dto.add(linkTo(methodOn(ClienteController.class).findById(id)).withSelfRel());
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody ClienteDTO dto) throws Exception {
+    public ResponseEntity<ClienteDTO> save(@RequestBody ClienteDTO dto) throws Exception {
         Cliente obj = service.save(modelMapper.map(dto, Cliente.class));
+        ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
+        resultDto.add(linkTo(methodOn(ClienteController.class).findById(resultDto.getIdCliente())).withSelfRel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdCliente()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(resultDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> update(@RequestBody ClienteDTO dto,@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<ClienteDTO> update(@RequestBody ClienteDTO dto, @PathVariable("id") Integer id) throws Exception {
         Cliente obj = service.update(modelMapper.map(dto, Cliente.class), id);
-        return ResponseEntity.ok(modelMapper.map(obj, ClienteDTO.class));
+        ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
+        resultDto.add(linkTo(methodOn(ClienteController.class).findById(id)).withSelfRel());
+        return ResponseEntity.ok(resultDto);
     }
 
     @DeleteMapping("/{id}")
