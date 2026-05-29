@@ -50,8 +50,13 @@ public class CategoriaController {
     public ResponseEntity<CategoriaDTO> save(@RequestBody CategoriaDTO dto) throws Exception {
         Categoria obj = service.save(modelMapper.map(dto, Categoria.class));
         CategoriaDTO resultDto = modelMapper.map(obj, CategoriaDTO.class);
+
+
         resultDto.add(linkTo(methodOn(CategoriaController.class).findById(resultDto.getIdCategoria())).withSelfRel());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdCategoria()).toUri();
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}").buildAndExpand(obj.getIdCategoria()).toUri();
+            
         return ResponseEntity.created(location).body(resultDto);
     }
 

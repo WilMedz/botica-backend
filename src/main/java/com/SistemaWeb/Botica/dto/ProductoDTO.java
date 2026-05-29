@@ -5,12 +5,17 @@ import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductoDTO {
+@EqualsAndHashCode(callSuper = false)
+@Relation(collectionRelation = "productos")
+public class ProductoDTO extends RepresentationModel<ProductoDTO> {
 
     private Integer idProducto;
     private String nombre;
@@ -20,8 +25,8 @@ public class ProductoDTO {
     private BigDecimal precioVenta;
     private Integer stock;
     private Integer stockMinimo;
-    private Integer idCategoria;   // Solo ID, evita referencia circular
-    private Integer idProveedor;   // Solo ID, evita referencia circular
+    private Integer idCategoria;
+    private Integer idProveedor;
     private Boolean estado;
     private LocalDate fechaVencimiento;
 }
