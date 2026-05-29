@@ -1,7 +1,9 @@
 package com.SistemaWeb.Botica.controller;
 
 import com.SistemaWeb.Botica.dto.ProductoDTO;
+import com.SistemaWeb.Botica.model.Categoria;
 import com.SistemaWeb.Botica.model.Producto;
+import com.SistemaWeb.Botica.model.Proveedor;
 import com.SistemaWeb.Botica.service.IProductoService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -48,21 +50,45 @@ public class ProductoController {
 
     @PostMapping
     public ResponseEntity<ProductoDTO> save(@RequestBody ProductoDTO dto) {
-        Producto obj = service.save(modelMapper.map(dto, Producto.class));
+        Producto obj = modelMapper.map(dto, Producto.class);
 
-        ProductoDTO resultDto = modelMapper.map(obj, ProductoDTO.class);
-        resultDto.add(linkTo(methodOn(ProductoController.class)
-        .findById(resultDto.getIdProducto())).withSelfRel());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}").buildAndExpand(obj.getIdProducto()).toUri();
+        if (dto.getIdCategoria() != null) {
+            Categoria cat = new Categoria();
+            cat.setIdCategoria(dto.getIdCategoria());
+            obj.setCategoria(cat);
+        }
+        if (dto.getIdProveedor() != null) {
+            Proveedor prov = new Proveedor();
+            prov.setIdProveedor(dto.getIdProveedor());
+            obj.setProveedor(prov);
+        }
+
+        Producto saved = service.save(obj);
+        ProductoDTO resultDto = modelMapper.map(saved, ProductoDTO.class);
+        resultDto.add(linkTo(methodOn(ProductoController.class).findById(resultDto.getIdProducto())).withSelfRel());
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(saved.getIdProducto()).toUri();
         return ResponseEntity.created(location).body(resultDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductoDTO> update(@RequestBody ProductoDTO dto, @PathVariable("id") Integer id) {
-        dto.setIdProducto(id);
-        Producto obj = service.update(modelMapper.map(dto, Producto.class), id);
-        ProductoDTO resultDto = modelMapper.map(obj, ProductoDTO.class);
+        Producto obj = modelMapper.map(dto, Producto.class);
+    
+        obj.setIdProducto(id);
+
+        if (dto.getIdCategoria() != null) {
+            Categoria cat = new Categoria();
+            cat.setIdCategoria(dto.getIdCategoria());
+            obj.setCategoria(cat);
+        }
+        if (dto.getIdProveedor() != null) {
+            Proveedor prov = new Proveedor();
+            prov.setIdProveedor(dto.getIdProveedor());
+            obj.setProveedor(prov);
+        }
+
+        Producto updated = service.update(obj, id);
+        ProductoDTO resultDto = modelMapper.map(updated, ProductoDTO.class);
         resultDto.add(linkTo(methodOn(ProductoController.class).findById(id)).withSelfRel());
         return ResponseEntity.ok(resultDto);
     }
