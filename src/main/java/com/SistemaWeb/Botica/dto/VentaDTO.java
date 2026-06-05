@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -12,10 +14,11 @@ import java.time.LocalDateTime;
 public class VentaDTO {
 
     private Integer idVenta;
-    private LocalDateTime fechaVenta;
-    private Double totalVenta;
-    private String tipoPago;
-    private Boolean estado;
-    private Integer idUsuario;  // Solo el ID del usuario que realizó la venta
-    private Integer idCliente;  // Solo el ID del cliente
+    private LocalDateTime fecha;
+    private BigDecimal total;
+    private String estado;
+    private String observacion;
+    private Integer idCliente;
+    private String nombreCliente;
+    private List<DetalleVentaDTO> detalles;
 }
