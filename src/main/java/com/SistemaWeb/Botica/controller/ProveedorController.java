@@ -30,12 +30,12 @@ public class ProveedorController {
         List<ProveedorDTO> list = service.findAll().stream()
                 .map(e -> {
                     ProveedorDTO dto = modelMapper.map(e, ProveedorDTO.class);
-                    // Agrega /proveedores/{id} a cada elemento individual de la lista
+                    
                     dto.add(linkTo(methodOn(ProveedorController.class).findById(dto.getIdProveedor())).withSelfRel());
                     return dto;
                 }).toList();
 
-        // Agrega el link global /proveedores a la colección completa
+        
         CollectionModel<ProveedorDTO> result = CollectionModel.of(list, 
                 linkTo(methodOn(ProveedorController.class).findAll()).withSelfRel());
                 
@@ -47,7 +47,7 @@ public class ProveedorController {
         Proveedor obj = service.findById(id);
         ProveedorDTO dto = modelMapper.map(obj, ProveedorDTO.class);
         
-        // Agrega el enlace propio /proveedores/{id}
+        
         dto.add(linkTo(methodOn(ProveedorController.class).findById(id)).withSelfRel());
         
         return ResponseEntity.ok(dto);
@@ -58,7 +58,7 @@ public class ProveedorController {
         Proveedor obj = service.save(modelMapper.map(dto, Proveedor.class));
         ProveedorDTO resultDto = modelMapper.map(obj, ProveedorDTO.class);
         
-        // Agrega el enlace del recurso recién creado
+        
         resultDto.add(linkTo(methodOn(ProveedorController.class).findById(resultDto.getIdProveedor())).withSelfRel());
         
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -69,12 +69,12 @@ public class ProveedorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProveedorDTO> update(@RequestBody ProveedorDTO dto, @PathVariable("id") Integer id) {
-        // Forzamos que el objeto lleve el ID de la URL para evitar discrepancias
+        
         dto.setIdProveedor(id);
         Proveedor obj = service.update(modelMapper.map(dto, Proveedor.class), id);
         ProveedorDTO resultDto = modelMapper.map(obj, ProveedorDTO.class);
         
-        // Agrega el enlace propio actualizado
+        
         resultDto.add(linkTo(methodOn(ProveedorController.class).findById(id)).withSelfRel());
         
         return ResponseEntity.ok(resultDto);
