@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.validation.Valid; // Importación obligatoria para activar las validaciones
 import java.net.URI;
 import java.util.List;
 
@@ -30,12 +31,10 @@ public class ProveedorController {
         List<ProveedorDTO> list = service.findAll().stream()
                 .map(e -> {
                     ProveedorDTO dto = modelMapper.map(e, ProveedorDTO.class);
-                    
                     dto.add(linkTo(methodOn(ProveedorController.class).findById(dto.getIdProveedor())).withSelfRel());
                     return dto;
                 }).toList();
 
-        
         CollectionModel<ProveedorDTO> result = CollectionModel.of(list, 
                 linkTo(methodOn(ProveedorController.class).findAll()).withSelfRel());
                 
@@ -47,17 +46,15 @@ public class ProveedorController {
         Proveedor obj = service.findById(id);
         ProveedorDTO dto = modelMapper.map(obj, ProveedorDTO.class);
         
-        
         dto.add(linkTo(methodOn(ProveedorController.class).findById(id)).withSelfRel());
         
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public ResponseEntity<ProveedorDTO> save(@RequestBody ProveedorDTO dto) {
+    public ResponseEntity<ProveedorDTO> save(@Valid @RequestBody ProveedorDTO dto) { // <-- @Valid agregado aquí
         Proveedor obj = service.save(modelMapper.map(dto, Proveedor.class));
         ProveedorDTO resultDto = modelMapper.map(obj, ProveedorDTO.class);
-        
         
         resultDto.add(linkTo(methodOn(ProveedorController.class).findById(resultDto.getIdProveedor())).withSelfRel());
         
@@ -68,12 +65,10 @@ public class ProveedorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProveedorDTO> update(@RequestBody ProveedorDTO dto, @PathVariable("id") Integer id) {
-        
+    public ResponseEntity<ProveedorDTO> update(@Valid @RequestBody ProveedorDTO dto, @PathVariable("id") Integer id) { // <-- @Valid agregado aquí
         dto.setIdProveedor(id);
         Proveedor obj = service.update(modelMapper.map(dto, Proveedor.class), id);
         ProveedorDTO resultDto = modelMapper.map(obj, ProveedorDTO.class);
-        
         
         resultDto.add(linkTo(methodOn(ProveedorController.class).findById(id)).withSelfRel());
         
