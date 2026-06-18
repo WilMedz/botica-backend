@@ -39,6 +39,7 @@ public class LoginController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        
     }
 
     private void authenticate(String username, String password) throws Exception {
