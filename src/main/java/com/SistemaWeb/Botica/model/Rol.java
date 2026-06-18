@@ -24,5 +24,5 @@ public class Rol {
 	private Integer idRol;
 
 	@Column(nullable = false, length = 30, unique = true)
-	private String nombre; // ADMINISTRADOR | USUARIO
+	private String nombre; // Administrador / usuario 
 }
