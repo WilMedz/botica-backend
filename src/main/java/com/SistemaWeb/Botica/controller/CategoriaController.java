@@ -3,6 +3,8 @@ package com.SistemaWeb.Botica.controller;
 import com.SistemaWeb.Botica.dto.CategoriaDTO;
 import com.SistemaWeb.Botica.model.Categoria;
 import com.SistemaWeb.Botica.service.ICategoriaService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.CollectionModel;
@@ -47,7 +49,7 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDTO> save(@RequestBody CategoriaDTO dto) throws Exception {
+    public ResponseEntity<CategoriaDTO> save(@Valid @RequestBody CategoriaDTO dto) throws Exception {
         Categoria obj = service.save(modelMapper.map(dto, Categoria.class));
         CategoriaDTO resultDto = modelMapper.map(obj, CategoriaDTO.class);
 
@@ -61,7 +63,7 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> update(@RequestBody CategoriaDTO dto, @PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<CategoriaDTO> update(@Valid @RequestBody CategoriaDTO dto, @PathVariable("id") Integer id) throws Exception {
         Categoria obj = service.update(modelMapper.map(dto, Categoria.class), id);
         CategoriaDTO resultDto = modelMapper.map(obj, CategoriaDTO.class);
         resultDto.add(linkTo(methodOn(CategoriaController.class).findById(id)).withSelfRel());

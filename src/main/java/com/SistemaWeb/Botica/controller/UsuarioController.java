@@ -4,6 +4,8 @@ import com.SistemaWeb.Botica.dto.UsuarioDTO;
 import com.SistemaWeb.Botica.model.Usuario;
 import com.SistemaWeb.Botica.model.Rol;
 import com.SistemaWeb.Botica.service.IUsuarioService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> save(@RequestBody UsuarioDTO dto) throws Exception {
+    public ResponseEntity<UsuarioDTO> save(@Valid @RequestBody UsuarioDTO dto) throws Exception {
         Usuario obj = convertToEntity(dto);
         Usuario saved = service.save(obj);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(saved.getIdUsuario()).toUri();
@@ -39,7 +41,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> update(@RequestBody UsuarioDTO dto, @PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<UsuarioDTO> update(@Valid @RequestBody UsuarioDTO dto, @PathVariable("id") Integer id) throws Exception {
         Usuario obj = convertToEntity(dto);
         obj.setIdUsuario(id);
         Usuario updated = service.update(obj, id);

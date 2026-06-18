@@ -3,6 +3,8 @@ package com.SistemaWeb.Botica.controller;
 import com.SistemaWeb.Botica.dto.RolDTO;
 import com.SistemaWeb.Botica.model.Rol;
 import com.SistemaWeb.Botica.service.IRolService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +34,7 @@ public class RolController {
     }
 
     @PostMapping
-    public ResponseEntity<RolDTO> save(@RequestBody RolDTO dto) throws Exception {
+    public ResponseEntity<RolDTO> save(@Valid @RequestBody RolDTO dto) throws Exception {
         Rol obj = service.save(modelMapper.map(dto, Rol.class));
         RolDTO resultDto = modelMapper.map(obj, RolDTO.class);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdRol()).toUri();
@@ -40,7 +42,7 @@ public class RolController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RolDTO> update(@RequestBody RolDTO dto, @PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<RolDTO> update(@Valid @RequestBody RolDTO dto, @PathVariable("id") Integer id) throws Exception {
         Rol obj = modelMapper.map(dto, Rol.class);
         obj.setIdRol(id);
         Rol updated = service.update(obj, id);

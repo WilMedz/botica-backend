@@ -3,6 +3,8 @@ package com.SistemaWeb.Botica.controller;
 import com.SistemaWeb.Botica.dto.ClienteDTO;
 import com.SistemaWeb.Botica.model.Cliente;
 import com.SistemaWeb.Botica.service.IClienteService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.CollectionModel;
@@ -47,7 +49,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> save(@RequestBody ClienteDTO dto) throws Exception {
+    public ResponseEntity<ClienteDTO> save(@Valid @RequestBody ClienteDTO dto) throws Exception {
         Cliente obj = service.save(modelMapper.map(dto, Cliente.class));
         ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
         resultDto.add(linkTo(methodOn(ClienteController.class).findById(resultDto.getIdCliente())).withSelfRel());
@@ -56,7 +58,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> update(@RequestBody ClienteDTO dto, @PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<ClienteDTO> update(@Valid @RequestBody ClienteDTO dto, @PathVariable("id") Integer id) throws Exception {
         Cliente obj = service.update(modelMapper.map(dto, Cliente.class), id);
         ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
         resultDto.add(linkTo(methodOn(ClienteController.class).findById(id)).withSelfRel());
