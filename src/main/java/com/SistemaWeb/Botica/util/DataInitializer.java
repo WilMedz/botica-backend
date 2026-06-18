@@ -44,7 +44,7 @@ public class DataInitializer implements CommandLineRunner {
                         "Admin",
                         "Botica",
                         "admin",
-                        "$2a$10$ju20i95JTDkRa7Sua63JWOChSBc0MNFtG/6Sps2ahFFqN.HCCUMW.", // BCrypt para la contraseña
+                        "$2a$12$6YTZGNkwi.IoFCtoVP/rIusLpekDNzFgOuy/dvzYMEtk5IZG.T2o6", // BCrypt para la contraseña: admin
                         "admin@botica.com",
                         true,
                         adminRole
