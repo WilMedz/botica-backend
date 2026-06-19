@@ -21,6 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     private final IProveedorRepository proveedorRepository;
     private final IClienteRepository clienteRepository;
     private final IProductoRepository productoRepository;
+    private final IMenuRepository menuRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -34,6 +35,11 @@ public class DataInitializer implements CommandLineRunner {
         if (usuarioRepository.count() == 0) {
             Rol adminRole = rolRepository.findAll().stream()
                     .filter(r -> r.getNombre().equalsIgnoreCase("ADMINISTRADOR"))
+                    .findFirst()
+                    .orElse(null);
+
+            Rol userRole = rolRepository.findAll().stream()
+                    .filter(r -> r.getNombre().equalsIgnoreCase("USUARIO"))
                     .findFirst()
                     .orElse(null);
 
@@ -51,6 +57,21 @@ public class DataInitializer implements CommandLineRunner {
                 );
                 usuarioRepository.save(admin);
                 System.out.println("Usuario de prueba insertado.");
+            }
+
+            if (userRole != null) {
+                Usuario vendedor = new Usuario(
+                        null,
+                        "Carlos",
+                        "Vendedor",
+                        "vendedor",
+                        "$2a$12$6YTZGNkwi.IoFCtoVP/rIusLpekDNzFgOuy/dvzYMEtk5IZG.T2o6", // mismo hash: contraseña "admin"
+                        "vendedor@botica.com",
+                        true,
+                        userRole
+                );
+                usuarioRepository.save(vendedor);
+                System.out.println("Usuario vendedor insertado.");
             }
         }
 
@@ -121,6 +142,24 @@ public class DataInitializer implements CommandLineRunner {
             );
             productoRepository.saveAll(productos);
             System.out.println("Productos de prueba insertados.");
+        }
+
+        List<Rol> roles = rolRepository.findAll();
+        Rol adminRole2 = roles.stream().filter(r -> r.getNombre().equalsIgnoreCase("ADMINISTRADOR")).findFirst().orElse(null);
+        Rol userRole2 = roles.stream().filter(r -> r.getNombre().equalsIgnoreCase("USUARIO")).findFirst().orElse(null);
+
+        if (menuRepository.count() == 0 && adminRole2 != null && userRole2 != null) {
+            Menu dashboard = new Menu(null, "Dashboard", "dashboard", "/pages/dashboard", Arrays.asList(adminRole2, userRole2));
+            Menu categorias = new Menu(null, "Categorías", "category", "/pages/categorias", Arrays.asList(adminRole2, userRole2));
+            Menu proveedores = new Menu(null, "Proveedores", "local_shipping", "/pages/proveedores", Arrays.asList(adminRole2));
+            Menu productos = new Menu(null, "Productos", "medication", "/pages/productos", Arrays.asList(adminRole2, userRole2));
+            Menu clientes = new Menu(null, "Clientes", "people", "/pages/clientes", Arrays.asList(adminRole2, userRole2));
+            Menu ventas = new Menu(null, "Ventas", "point_of_sale", "/pages/ventas", Arrays.asList(adminRole2, userRole2));
+            //Menu roles_ = new Menu(null, "Roles", "key", "/pages/roles", Arrays.asList(adminRole2));
+            Menu usuarios = new Menu(null, "Usuarios", "person", "/pages/usuarios", Arrays.asList(adminRole2));
+
+            menuRepository.saveAll(Arrays.asList(dashboard, categorias, proveedores, productos, clientes, ventas, usuarios));
+            System.out.println("Menús insertados.");
         }
     }
 }

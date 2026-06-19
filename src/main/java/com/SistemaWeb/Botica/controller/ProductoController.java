@@ -5,6 +5,8 @@ import com.SistemaWeb.Botica.model.Categoria;
 import com.SistemaWeb.Botica.model.Producto;
 import com.SistemaWeb.Botica.model.Proveedor;
 import com.SistemaWeb.Botica.service.IProductoService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.CollectionModel;
@@ -49,7 +51,7 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductoDTO> save(@RequestBody ProductoDTO dto) {
+    public ResponseEntity<ProductoDTO> save(@Valid @RequestBody ProductoDTO dto) {
         Producto obj = modelMapper.map(dto, Producto.class);
 
         if (dto.getIdCategoria() != null) {
@@ -71,7 +73,7 @@ public class ProductoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductoDTO> update(@RequestBody ProductoDTO dto, @PathVariable("id") Integer id) {
+    public ResponseEntity<ProductoDTO> update(@Valid @RequestBody ProductoDTO dto, @PathVariable("id") Integer id) {
         Producto obj = modelMapper.map(dto, Producto.class);
     
         obj.setIdProducto(id);
