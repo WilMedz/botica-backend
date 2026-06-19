@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.security.core.Authentication;
 
 import java.net.URI;
 import java.util.List;
@@ -29,6 +30,13 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> findById(@PathVariable("id") Integer id) throws Exception {
         Usuario obj = service.findById(id);
+        return ResponseEntity.ok(convertToDto(obj));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioDTO> me(Authentication authentication) throws Exception {
+        String username = authentication.getName();
+        Usuario obj = service.findOneByUsername(username);
         return ResponseEntity.ok(convertToDto(obj));
     }
 
