@@ -26,9 +26,9 @@ public class MenuController {
         
         
         String nombreRol = authentication.getAuthorities().stream()
-                .map(auth -> auth.getAuthority()) 
+                .map(auth -> auth.getAuthority().replace("ROLE_", "")) 
                 .findFirst()
-                .orElse("USER");
+                .orElse("VENDEDOR");
 
        
         List<Menu> menus = service.findMenusByRol(nombreRol);
