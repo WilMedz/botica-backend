@@ -2,7 +2,6 @@ package com.SistemaWeb.Botica.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

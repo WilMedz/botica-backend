@@ -28,5 +28,4 @@ public class UsuarioService extends GenericService<Usuario, Integer> implements 
     public void changePassword(String username, String newPassword) {
         repo.changePassword(username, bcrypt.encode(newPassword));
     }
-
 }

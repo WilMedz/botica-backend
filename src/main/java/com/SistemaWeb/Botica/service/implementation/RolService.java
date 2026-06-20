@@ -16,5 +16,4 @@ public class RolService extends GenericService<Rol, Integer> implements IRolServ
     protected IGenericRepository<Rol, Integer> getRepo() {
         return repo;
     }
-
 }

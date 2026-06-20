@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/menus")
-@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class MenuController {
 
@@ -21,7 +20,7 @@ public class MenuController {
     private final ModelMapper modelMapper;
 
     @GetMapping("/user")
-    public ResponseEntity<List<MenuDTO>> getMenusByUser() throws Exception {
+    public ResponseEntity<List<MenuDTO>> getMenusByUser() {
        
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         

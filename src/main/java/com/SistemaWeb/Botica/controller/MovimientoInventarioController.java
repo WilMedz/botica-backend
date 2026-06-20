@@ -8,8 +8,8 @@ import com.SistemaWeb.Botica.repository.IProductoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
 
@@ -21,19 +21,20 @@ public class MovimientoInventarioController {
     private final IProductoRepository productoRepo;
 
     @GetMapping
-    public ResponseEntity<List<MovimientoInventarioDTO>> findAll() throws Exception {
+    public ResponseEntity<List<MovimientoInventarioDTO>> findAll() {
         List<MovimientoInventarioDTO> list = service.findAll().stream().map(this::convertToDto).toList();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovimientoInventarioDTO> findById(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<MovimientoInventarioDTO> findById(@PathVariable("id") Integer id) {
         MovimientoInventario obj = service.findById(id);
         return ResponseEntity.ok(convertToDto(obj));
     }
 
     @PostMapping
-    public ResponseEntity<MovimientoInventarioDTO> save(@RequestBody MovimientoInventarioDTO dto) throws Exception {
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<MovimientoInventarioDTO> save(@RequestBody MovimientoInventarioDTO dto) {
         MovimientoInventario obj = convertToEntity(dto);
         
         // Si es una creación manual, ajustamos el stock del producto
@@ -64,7 +65,8 @@ public class MovimientoInventarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovimientoInventarioDTO> update(@RequestBody MovimientoInventarioDTO dto, @PathVariable("id") Integer id) throws Exception {
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<MovimientoInventarioDTO> update(@RequestBody MovimientoInventarioDTO dto, @PathVariable("id") Integer id) {
         MovimientoInventario obj = convertToEntity(dto);
         obj.setIdMovimiento(id);
         MovimientoInventario updated = service.update(obj, id);
@@ -72,7 +74,8 @@ public class MovimientoInventarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws Exception {
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

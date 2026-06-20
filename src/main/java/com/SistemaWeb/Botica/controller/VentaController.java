@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
 
@@ -22,19 +21,19 @@ public class VentaController {
     private final IVentaService service;
 
     @GetMapping
-    public ResponseEntity<List<VentaDTO>> findAll() throws Exception {
+    public ResponseEntity<List<VentaDTO>> findAll() {
         List<VentaDTO> list = service.findAll().stream().map(this::convertToDto).toList();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VentaDTO> findById(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<VentaDTO> findById(@PathVariable("id") Integer id) {
         Venta obj = service.findById(id);
         return ResponseEntity.ok(convertToDto(obj));
     }
 
     @PostMapping
-    public ResponseEntity<VentaDTO> save(@RequestBody VentaDTO dto) throws Exception {
+    public ResponseEntity<VentaDTO> save(@RequestBody VentaDTO dto) {
         Venta obj = convertToEntity(dto);
         Venta saved = service.save(obj);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(saved.getIdVenta()).toUri();
@@ -42,7 +41,7 @@ public class VentaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VentaDTO> update(@RequestBody VentaDTO dto, @PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<VentaDTO> update(@RequestBody VentaDTO dto, @PathVariable("id") Integer id) {
         Venta obj = convertToEntity(dto);
         obj.setIdVenta(id);
         Venta updated = service.update(obj, id);
@@ -50,7 +49,7 @@ public class VentaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

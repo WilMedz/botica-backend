@@ -49,7 +49,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> save(@Valid @RequestBody ClienteDTO dto) throws Exception {
+    public ResponseEntity<ClienteDTO> save(@Valid @RequestBody ClienteDTO dto) {
         Cliente obj = service.save(modelMapper.map(dto, Cliente.class));
         ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
         resultDto.add(linkTo(methodOn(ClienteController.class).findById(resultDto.getIdCliente())).withSelfRel());
@@ -58,7 +58,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> update(@Valid @RequestBody ClienteDTO dto, @PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<ClienteDTO> update(@Valid @RequestBody ClienteDTO dto, @PathVariable("id") Integer id) {
         Cliente obj = service.update(modelMapper.map(dto, Cliente.class), id);
         ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
         resultDto.add(linkTo(methodOn(ClienteController.class).findById(id)).withSelfRel());
@@ -66,7 +66,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

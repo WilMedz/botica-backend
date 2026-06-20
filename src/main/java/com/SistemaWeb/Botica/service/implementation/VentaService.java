@@ -30,10 +30,9 @@ public class VentaService extends GenericService<Venta, Integer> implements IVen
     @Override
     @Transactional
     public Venta save(Venta t) {
-        // Guardar la venta con sus detalles
+        
         Venta saved = repo.save(t);
         
-        // Actualizar el stock del producto y crear los movimientos de inventario correspondientes
         if (saved.getDetalles() != null) {
             for (DetalleVenta det : saved.getDetalles()) {
                 if (det.getProducto() != null && det.getProducto().getIdProducto() != null) {
@@ -44,7 +43,6 @@ public class VentaService extends GenericService<Venta, Integer> implements IVen
                         prod.setStock(stockNuevo);
                         productoRepo.save(prod);
                         
-                        // Crear movimiento de inventario
                         MovimientoInventario mov = new MovimientoInventario();
                         mov.setProducto(prod);
                         mov.setTipo("SALIDA");

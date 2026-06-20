@@ -8,18 +8,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import jakarta.validation.Valid; // Importación obligatoria para activar las validaciones
+import jakarta.validation.Valid; 
 import java.net.URI;
 import java.util.List;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/proveedores")
-@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class ProveedorController {
 
@@ -52,7 +50,8 @@ public class ProveedorController {
     }
 
     @PostMapping
-    public ResponseEntity<ProveedorDTO> save(@Valid @RequestBody ProveedorDTO dto) { // <-- @Valid agregado aquí
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<ProveedorDTO> save(@Valid @RequestBody ProveedorDTO dto) {
         Proveedor obj = service.save(modelMapper.map(dto, Proveedor.class));
         ProveedorDTO resultDto = modelMapper.map(obj, ProveedorDTO.class);
         
@@ -65,7 +64,8 @@ public class ProveedorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProveedorDTO> update(@Valid @RequestBody ProveedorDTO dto, @PathVariable("id") Integer id) { // <-- @Valid agregado aquí
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<ProveedorDTO> update(@Valid @RequestBody ProveedorDTO dto, @PathVariable("id") Integer id) {
         dto.setIdProveedor(id);
         Proveedor obj = service.update(modelMapper.map(dto, Proveedor.class), id);
         ProveedorDTO resultDto = modelMapper.map(obj, ProveedorDTO.class);
@@ -76,6 +76,7 @@ public class ProveedorController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

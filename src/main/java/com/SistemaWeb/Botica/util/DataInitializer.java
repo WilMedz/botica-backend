@@ -5,7 +5,6 @@ import com.SistemaWeb.Botica.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -27,7 +26,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (rolRepository.count() == 0) {
             Rol admin = new Rol(null, "ADMINISTRADOR");
-            Rol user = new Rol(null, "USUARIO");
+            Rol user = new Rol(null, "VENDEDOR");
             rolRepository.saveAll(Arrays.asList(admin, user));
             System.out.println("Roles insertados.");
         }
@@ -39,7 +38,7 @@ public class DataInitializer implements CommandLineRunner {
                     .orElse(null);
 
             Rol userRole = rolRepository.findAll().stream()
-                    .filter(r -> r.getNombre().equalsIgnoreCase("USUARIO"))
+                    .filter(r -> r.getNombre().equalsIgnoreCase("VENDEDOR"))
                     .findFirst()
                     .orElse(null);
 
@@ -146,7 +145,7 @@ public class DataInitializer implements CommandLineRunner {
 
         List<Rol> roles = rolRepository.findAll();
         Rol adminRole2 = roles.stream().filter(r -> r.getNombre().equalsIgnoreCase("ADMINISTRADOR")).findFirst().orElse(null);
-        Rol userRole2 = roles.stream().filter(r -> r.getNombre().equalsIgnoreCase("USUARIO")).findFirst().orElse(null);
+        Rol userRole2 = roles.stream().filter(r -> r.getNombre().equalsIgnoreCase("VENDEDOR")).findFirst().orElse(null);
 
         if (menuRepository.count() == 0 && adminRole2 != null && userRole2 != null) {
             Menu dashboard = new Menu(null, "Dashboard", "dashboard", "/pages/dashboard", Arrays.asList(adminRole2, userRole2));
@@ -155,7 +154,6 @@ public class DataInitializer implements CommandLineRunner {
             Menu productos = new Menu(null, "Productos", "medication", "/pages/productos", Arrays.asList(adminRole2, userRole2));
             Menu clientes = new Menu(null, "Clientes", "people", "/pages/clientes", Arrays.asList(adminRole2, userRole2));
             Menu ventas = new Menu(null, "Ventas", "point_of_sale", "/pages/ventas", Arrays.asList(adminRole2, userRole2));
-            //Menu roles_ = new Menu(null, "Roles", "key", "/pages/roles", Arrays.asList(adminRole2));
             Menu usuarios = new Menu(null, "Usuarios", "person", "/pages/usuarios", Arrays.asList(adminRole2));
 
             menuRepository.saveAll(Arrays.asList(dashboard, categorias, proveedores, productos, clientes, ventas, usuarios));

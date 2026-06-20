@@ -30,8 +30,6 @@ public class UsuarioDTO {
     @Size(min = 3, max = 80, message = "El username debe tener entre 3 y 80 caracteres")
     private String username;
 
-    @NotNull(message = "La contraseña no debe ser nula")
-    @NotBlank(message = "La contraseña no debe estar en blanco")
     @Size(min = 4, max = 200, message = "La contraseña debe tener entre 4 y 200 caracteres")
     private String password;
 

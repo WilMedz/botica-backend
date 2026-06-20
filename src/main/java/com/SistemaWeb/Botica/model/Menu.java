@@ -14,7 +14,6 @@ import java.util.List;
 @Table(name = "menus")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Menu {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -29,7 +28,6 @@ public class Menu {
     @Column(nullable = false, length = 100)
     private String url; 
 
-    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "menu_roles", 

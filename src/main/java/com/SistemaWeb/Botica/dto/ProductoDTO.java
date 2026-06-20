@@ -2,7 +2,6 @@ package com.SistemaWeb.Botica.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -48,7 +47,6 @@ public class ProductoDTO extends RepresentationModel<ProductoDTO> {
     @NotNull
     private Integer idCategoria;
 
-    @NotNull
     private Integer idProveedor;
 
     @NotNull

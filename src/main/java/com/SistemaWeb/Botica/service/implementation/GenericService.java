@@ -16,7 +16,7 @@ public abstract class GenericService<T, ID> implements IGenericService<T, ID> {
 
     @Override
     public T update(T t, ID id) {
-        this.findById(id); // Lanza ModelNotFoundException si no existe
+        this.findById(id);
         return getRepo().save(t);
     }
 
@@ -33,7 +33,7 @@ public abstract class GenericService<T, ID> implements IGenericService<T, ID> {
 
     @Override
     public void delete(ID id) {
-        this.findById(id); // Lanza ModelNotFoundException si no existe
+        this.findById(id);
         getRepo().deleteById(id);
     }
 }

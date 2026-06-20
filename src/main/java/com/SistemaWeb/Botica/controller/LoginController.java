@@ -28,7 +28,7 @@ public class LoginController {
     private final JwtUserDetailsService jwtUserDetailsService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest jwtRequest) throws Exception {
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest jwtRequest) {
         try {
             authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
 
