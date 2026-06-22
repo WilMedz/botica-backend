@@ -59,4 +59,55 @@ public class VentaService extends GenericService<Venta, Integer> implements IVen
         
         return saved;
     }
+
+    @Override
+    @Transactional
+    public Venta update(Venta t, Integer id) {
+        Venta ventaAnterior = repo.findById(id).orElse(null);
+
+        if (ventaAnterior != null && ventaAnterior.getDetalles() != null) {
+            for (DetalleVenta detAnterior : ventaAnterior.getDetalles()) {
+                ajustarStock(detAnterior, true, id);
+            }
+        }
+
+        t.setIdVenta(id);
+        Venta actualizada = repo.save(t);
+
+        if (actualizada.getDetalles() != null) {
+            for (DetalleVenta detNuevo : actualizada.getDetalles()) {
+                ajustarStock(detNuevo, false, id);
+            }
+        }
+
+        return actualizada;
+    }
+
+    private void ajustarStock(DetalleVenta detalle, boolean devolver, Integer idVenta) {
+        if (detalle.getProducto() == null || detalle.getProducto().getIdProducto() == null) {
+            return;
+        }
+
+        Producto prod = productoRepo.findById(detalle.getProducto().getIdProducto()).orElse(null);
+        if (prod == null ) {
+            return;
+        }
+
+        int stockAnterior = prod.getStock();
+        int stockNuevo = devolver
+                ? stockAnterior + detalle.getCantidad()
+                : stockAnterior - detalle.getCantidad();
+        prod.setStock(stockNuevo);
+        productoRepo.save(prod);
+
+        MovimientoInventario mov = new MovimientoInventario();
+        mov.setProducto(prod);
+        mov.setTipo(devolver ? "ENTRADA" : "SALIDA");
+        mov.setCantidad(detalle.getCantidad());
+        mov.setStockAnterior(stockAnterior);
+        mov.setStockNuevo(stockNuevo);
+        mov.setMotivo((devolver ? "Edición de Venta #" + idVenta + " (reverso)" : "Edición de Venta #" + idVenta));
+        mov.setFecha(LocalDateTime.now());
+        movimientoRepo.save(mov);
+    }
 }
