@@ -1,3 +1,4 @@
+// RolService.java
 package com.SistemaWeb.Botica.service.implementation;
 
 import com.SistemaWeb.Botica.model.Rol;
@@ -5,6 +6,8 @@ import com.SistemaWeb.Botica.repository.IRolRepository;
 import com.SistemaWeb.Botica.repository.IGenericRepository;
 import com.SistemaWeb.Botica.service.IRolService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,5 +18,10 @@ public class RolService extends GenericService<Rol, Integer> implements IRolServ
     @Override
     protected IGenericRepository<Rol, Integer> getRepo() {
         return repo;
+    }
+
+    @Override
+    public Page<Rol> listPage(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 }
