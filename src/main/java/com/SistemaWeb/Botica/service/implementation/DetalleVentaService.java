@@ -5,6 +5,8 @@ import com.SistemaWeb.Botica.repository.IDetalleVentaRepository;
 import com.SistemaWeb.Botica.repository.IGenericRepository;
 import com.SistemaWeb.Botica.service.IDetalleVentaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,9 +14,13 @@ import org.springframework.stereotype.Service;
 public class DetalleVentaService extends GenericService<DetalleVenta, Integer> implements IDetalleVentaService {
     private final IDetalleVentaRepository repo;
 
-    @Override
+     @Override
     protected IGenericRepository<DetalleVenta, Integer> getRepo() {
         return repo;
     }
 
+    @Override
+    public Page<DetalleVenta> listPage(Pageable pageable) {
+        return repo.findAll(pageable);
+    }
 }

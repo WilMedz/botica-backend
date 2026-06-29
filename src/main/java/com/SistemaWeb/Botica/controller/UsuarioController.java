@@ -30,11 +30,11 @@ public class UsuarioController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/pageable")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public ResponseEntity<UsuarioDTO> findById(@PathVariable("id") Integer id) {
-        Usuario obj = service.findById(id);
-        return ResponseEntity.ok(convertToDto(obj));
+    public ResponseEntity<Page<Usuario>> findAllPageable(Pageable pageable) {
+        Page<Usuario> page = service.listPage(pageable);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/me")
@@ -44,11 +44,11 @@ public class UsuarioController {
         return ResponseEntity.ok(convertToDto(obj));
     }
 
-    @GetMapping("/pageable")
+    @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public ResponseEntity<Page<Usuario>> findAllPageable(Pageable pageable) {
-        Page<Usuario> page = service.listPage(pageable);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<UsuarioDTO> findById(@PathVariable("id") Integer id) {
+        Usuario obj = service.findById(id);
+        return ResponseEntity.ok(convertToDto(obj));
     }
 
     @PostMapping

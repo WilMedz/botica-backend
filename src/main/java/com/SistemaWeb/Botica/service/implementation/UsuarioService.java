@@ -5,6 +5,8 @@ import com.SistemaWeb.Botica.repository.IUsuarioRepository;
 import com.SistemaWeb.Botica.repository.IGenericRepository;
 import com.SistemaWeb.Botica.service.IUsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,11 @@ public class UsuarioService extends GenericService<Usuario, Integer> implements 
     @Override
     protected IGenericRepository<Usuario, Integer> getRepo() {
         return repo;
+    }
+
+    @Override
+    public Page<Usuario> listPage(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     @Override

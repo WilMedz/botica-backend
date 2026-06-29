@@ -4,6 +4,8 @@ import com.SistemaWeb.Botica.model.Producto;
 import com.SistemaWeb.Botica.repository.IGenericRepository;
 import com.SistemaWeb.Botica.repository.IProductoRepository;
 import com.SistemaWeb.Botica.service.IProductoService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +17,10 @@ public class ProductoService extends GenericService<Producto, Integer> implement
     @Override
     protected IGenericRepository<Producto, Integer> getRepo() {
         return repo;
+    }
+
+    @Override
+    public Page<Producto> listPage(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 }
