@@ -1,20 +1,19 @@
 package com.SistemaWeb.Botica.controller;
-
 import com.SistemaWeb.Botica.dto.ClienteDTO;
 import com.SistemaWeb.Botica.model.Cliente;
 import com.SistemaWeb.Botica.service.IClienteService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -49,6 +48,7 @@ public class ClienteController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ClienteDTO> save(@Valid @RequestBody ClienteDTO dto) {
         Cliente obj = service.save(modelMapper.map(dto, Cliente.class));
         ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
@@ -58,6 +58,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ClienteDTO> update(@Valid @RequestBody ClienteDTO dto, @PathVariable("id") Integer id) {
         Cliente obj = service.update(modelMapper.map(dto, Cliente.class), id);
         ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
@@ -66,8 +67,15 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<Cliente>> findAllPageable(Pageable pageable) {
+        Page<Cliente> page = service.listPage(pageable);
+        return ResponseEntity.ok(page);
     }
 }

@@ -6,6 +6,8 @@ import com.SistemaWeb.Botica.service.ICategoriaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -74,5 +76,11 @@ public class CategoriaController {
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<Categoria>> findAllPageable(Pageable pageable) {
+        Page<Categoria> page = service.listPage(pageable);
+        return ResponseEntity.ok(page);
     }
 }

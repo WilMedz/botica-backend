@@ -6,6 +6,8 @@ import com.SistemaWeb.Botica.model.Rol;
 import com.SistemaWeb.Botica.service.IUsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +42,13 @@ public class UsuarioController {
         String username = authentication.getName();
         Usuario obj = service.findOneByUsername(username);
         return ResponseEntity.ok(convertToDto(obj));
+    }
+
+    @GetMapping("/pageable")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<Page<Usuario>> findAllPageable(Pageable pageable) {
+        Page<Usuario> page = service.listPage(pageable);
+        return ResponseEntity.ok(page);
     }
 
     @PostMapping

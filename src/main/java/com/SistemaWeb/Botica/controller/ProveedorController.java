@@ -5,6 +5,8 @@ import com.SistemaWeb.Botica.model.Proveedor;
 import com.SistemaWeb.Botica.service.IProveedorService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +51,7 @@ public class ProveedorController {
         return ResponseEntity.ok(dto);
     }
 
+
     @PostMapping
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ProveedorDTO> save(@Valid @RequestBody ProveedorDTO dto) {
@@ -81,4 +84,10 @@ public class ProveedorController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<Proveedor>> findAllPageable(Pageable pageable) {
+    Page<Proveedor> page = service.listPage(pageable);
+    return ResponseEntity.ok(page);
+}
 }

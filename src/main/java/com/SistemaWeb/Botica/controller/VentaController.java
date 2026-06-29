@@ -8,7 +8,10 @@ import com.SistemaWeb.Botica.model.Cliente;
 import com.SistemaWeb.Botica.model.Producto;
 import com.SistemaWeb.Botica.service.IVentaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
@@ -32,7 +35,14 @@ public class VentaController {
         return ResponseEntity.ok(convertToDto(obj));
     }
 
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<Venta>> findAllPageable(Pageable pageable) {
+        Page<Venta> page = service.listPage(pageable);
+        return ResponseEntity.ok(page);
+    }
+
     @PostMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<VentaDTO> save(@RequestBody VentaDTO dto) {
         Venta obj = convertToEntity(dto);
         Venta saved = service.save(obj);
@@ -41,6 +51,7 @@ public class VentaController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<VentaDTO> update(@RequestBody VentaDTO dto, @PathVariable("id") Integer id) {
         Venta obj = convertToEntity(dto);
         obj.setIdVenta(id);
@@ -49,6 +60,7 @@ public class VentaController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
@@ -61,12 +73,10 @@ public class VentaController {
         dto.setTotal(entity.getTotal());
         dto.setEstado(entity.getEstado());
         dto.setObservacion(entity.getObservacion());
-        
         if (entity.getCliente() != null) {
             dto.setIdCliente(entity.getCliente().getIdCliente());
             dto.setNombreCliente(entity.getCliente().getNombre() + " " + entity.getCliente().getApellido());
         }
-        
         if (entity.getDetalles() != null) {
             List<DetalleVentaDTO> detallesDto = entity.getDetalles().stream().map(d -> {
                 DetalleVentaDTO dDto = new DetalleVentaDTO();
@@ -92,13 +102,11 @@ public class VentaController {
         entity.setTotal(dto.getTotal());
         entity.setEstado(dto.getEstado());
         entity.setObservacion(dto.getObservacion());
-        
         if (dto.getIdCliente() != null) {
             Cliente c = new Cliente();
             c.setIdCliente(dto.getIdCliente());
             entity.setCliente(c);
         }
-        
         if (dto.getDetalles() != null) {
             List<DetalleVenta> detalles = dto.getDetalles().stream().map(d -> {
                 DetalleVenta det = new DetalleVenta();

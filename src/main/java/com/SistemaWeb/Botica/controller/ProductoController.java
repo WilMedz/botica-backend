@@ -8,6 +8,8 @@ import com.SistemaWeb.Botica.service.IProductoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +35,8 @@ public class ProductoController {
                     dto.add(linkTo(methodOn(ProductoController.class).findById(dto.getIdProducto())).withSelfRel());
                     return dto;
                 }).toList();
-
         CollectionModel<ProductoDTO> result = CollectionModel.of(list,
                 linkTo(methodOn(ProductoController.class).findAll()).withSelfRel());
-
         return ResponseEntity.ok(result);
     }
 
@@ -48,11 +48,16 @@ public class ProductoController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<Producto>> findAllPageable(Pageable pageable) {
+        Page<Producto> page = service.listPage(pageable);
+        return ResponseEntity.ok(page);
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ProductoDTO> save(@Valid @RequestBody ProductoDTO dto) {
         Producto obj = modelMapper.map(dto, Producto.class);
-
         if (dto.getIdCategoria() != null) {
             Categoria cat = new Categoria();
             cat.setIdCategoria(dto.getIdCategoria());
@@ -63,7 +68,6 @@ public class ProductoController {
             prov.setIdProveedor(dto.getIdProveedor());
             obj.setProveedor(prov);
         }
-
         Producto saved = service.save(obj);
         ProductoDTO resultDto = modelMapper.map(saved, ProductoDTO.class);
         resultDto.add(linkTo(methodOn(ProductoController.class).findById(resultDto.getIdProducto())).withSelfRel());
@@ -75,9 +79,7 @@ public class ProductoController {
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ProductoDTO> update(@Valid @RequestBody ProductoDTO dto, @PathVariable("id") Integer id) {
         Producto obj = modelMapper.map(dto, Producto.class);
-    
         obj.setIdProducto(id);
-
         if (dto.getIdCategoria() != null) {
             Categoria cat = new Categoria();
             cat.setIdCategoria(dto.getIdCategoria());
@@ -88,7 +90,6 @@ public class ProductoController {
             prov.setIdProveedor(dto.getIdProveedor());
             obj.setProveedor(prov);
         }
-
         Producto updated = service.update(obj, id);
         ProductoDTO resultDto = modelMapper.map(updated, ProductoDTO.class);
         resultDto.add(linkTo(methodOn(ProductoController.class).findById(id)).withSelfRel());

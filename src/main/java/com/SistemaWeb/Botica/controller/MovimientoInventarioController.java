@@ -6,6 +6,8 @@ import com.SistemaWeb.Botica.model.Producto;
 import com.SistemaWeb.Botica.service.IMovimientoInventarioService;
 import com.SistemaWeb.Botica.repository.IProductoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,12 +34,16 @@ public class MovimientoInventarioController {
         return ResponseEntity.ok(convertToDto(obj));
     }
 
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<MovimientoInventario>> findAllPageable(Pageable pageable) {
+        Page<MovimientoInventario> page = service.listPage(pageable);
+        return ResponseEntity.ok(page);
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<MovimientoInventarioDTO> save(@RequestBody MovimientoInventarioDTO dto) {
         MovimientoInventario obj = convertToEntity(dto);
-        
-        // Si es una creación manual, ajustamos el stock del producto
         if (dto.getIdProducto() != null) {
             Producto prod = productoRepo.findById(dto.getIdProducto()).orElse(null);
             if (prod != null) {
@@ -48,17 +54,14 @@ public class MovimientoInventarioController {
                 } else if ("SALIDA".equalsIgnoreCase(dto.getTipo())) {
                     stockNuevo = stockAnterior - dto.getCantidad();
                 } else if ("AJUSTE".equalsIgnoreCase(dto.getTipo())) {
-                    stockNuevo = dto.getCantidad(); // En caso de ajuste directo
+                    stockNuevo = dto.getCantidad();
                 }
-                
                 prod.setStock(stockNuevo);
                 productoRepo.save(prod);
-                
                 obj.setStockAnterior(stockAnterior);
                 obj.setStockNuevo(stockNuevo);
             }
         }
-        
         MovimientoInventario saved = service.save(obj);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(saved.getIdMovimiento()).toUri();
         return ResponseEntity.created(location).body(convertToDto(saved));
