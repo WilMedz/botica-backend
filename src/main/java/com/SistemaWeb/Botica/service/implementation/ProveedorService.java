@@ -1,4 +1,3 @@
-// ProveedorService.java
 package com.SistemaWeb.Botica.service.implementation;
 
 import com.SistemaWeb.Botica.model.Proveedor;

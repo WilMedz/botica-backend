@@ -5,6 +5,8 @@ import com.SistemaWeb.Botica.repository.ICategoriaRepository;
 import com.SistemaWeb.Botica.repository.IGenericRepository;
 import com.SistemaWeb.Botica.service.ICategoriaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,4 +19,8 @@ public class CategoriaService extends GenericService<Categoria, Integer> impleme
         return repo;
     }
 
+    @Override
+    public Page<Categoria> listPage(Pageable pageable) {
+        return repo.findAll(pageable);
+    }
 }
