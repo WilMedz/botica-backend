@@ -36,9 +36,10 @@ public class VentaController {
     }
 
     @GetMapping("/pageable")
-    public ResponseEntity<Page<Venta>> findAllPageable(Pageable pageable) {
+    public ResponseEntity<Page<VentaDTO>> findAllPageable(Pageable pageable) {
         Page<Venta> page = service.listPage(pageable);
-        return ResponseEntity.ok(page);
+        Page<VentaDTO> dtoPage = page.map(this::convertToDto);
+        return ResponseEntity.ok(dtoPage);
     }
 
     @PostMapping

@@ -155,8 +155,9 @@ public class DataInitializer implements CommandLineRunner {
             Menu clientes = new Menu(null, "Clientes", "people", "/pages/clientes", Arrays.asList(adminRole2, userRole2));
             Menu ventas = new Menu(null, "Ventas", "point_of_sale", "/pages/ventas", Arrays.asList(adminRole2, userRole2));
             Menu usuarios = new Menu(null, "Usuarios", "person", "/pages/usuarios", Arrays.asList(adminRole2));
+            Menu movimientos = new Menu(null, "Movimientos", "swap_horiz", "/pages/movimientos", Arrays.asList(adminRole2));
 
-            menuRepository.saveAll(Arrays.asList(dashboard, categorias, proveedores, productos, clientes, ventas, usuarios));
+            menuRepository.saveAll(Arrays.asList(dashboard, categorias, proveedores, productos, clientes, ventas, usuarios, movimientos));
             System.out.println("Menús insertados.");
         }
     }
