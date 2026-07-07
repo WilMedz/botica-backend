@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
@@ -43,7 +42,6 @@ public class VentaController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<VentaDTO> save(@RequestBody VentaDTO dto) {
         Venta obj = convertToEntity(dto);
         Venta saved = service.save(obj);
@@ -52,7 +50,6 @@ public class VentaController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<VentaDTO> update(@RequestBody VentaDTO dto, @PathVariable("id") Integer id) {
         Venta obj = convertToEntity(dto);
         obj.setIdVenta(id);
@@ -61,7 +58,6 @@ public class VentaController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
