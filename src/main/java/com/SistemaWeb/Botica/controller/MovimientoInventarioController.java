@@ -23,18 +23,21 @@ public class MovimientoInventarioController {
     private final IProductoRepository productoRepo;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<List<MovimientoInventarioDTO>> findAll() {
         List<MovimientoInventarioDTO> list = service.findAll().stream().map(this::convertToDto).toList();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<MovimientoInventarioDTO> findById(@PathVariable("id") Integer id) {
         MovimientoInventario obj = service.findById(id);
         return ResponseEntity.ok(convertToDto(obj));
     }
 
     @GetMapping("/pageable")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Page<MovimientoInventario>> findAllPageable(Pageable pageable) {
         Page<MovimientoInventario> page = service.listPage(pageable);
         return ResponseEntity.ok(page);

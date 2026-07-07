@@ -27,6 +27,7 @@ public class ProveedorController {
     private final ModelMapper modelMapper;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<CollectionModel<ProveedorDTO>> findAll() {
         List<ProveedorDTO> list = service.findAll().stream()
                 .map(e -> {
@@ -42,6 +43,7 @@ public class ProveedorController {
     }
     
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ProveedorDTO> findById(@PathVariable("id") Integer id) {
         Proveedor obj = service.findById(id);
         ProveedorDTO dto = modelMapper.map(obj, ProveedorDTO.class);
@@ -86,6 +88,7 @@ public class ProveedorController {
     }
 
     @GetMapping("/pageable")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Page<Proveedor>> findAllPageable(Pageable pageable) {
     Page<Proveedor> page = service.listPage(pageable);
     return ResponseEntity.ok(page);
