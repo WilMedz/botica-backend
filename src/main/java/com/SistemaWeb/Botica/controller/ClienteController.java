@@ -48,7 +48,6 @@ public class ClienteController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ClienteDTO> save(@Valid @RequestBody ClienteDTO dto) {
         Cliente obj = service.save(modelMapper.map(dto, Cliente.class));
         ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
@@ -58,7 +57,6 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ClienteDTO> update(@Valid @RequestBody ClienteDTO dto, @PathVariable("id") Integer id) {
         Cliente obj = service.update(modelMapper.map(dto, Cliente.class), id);
         ClienteDTO resultDto = modelMapper.map(obj, ClienteDTO.class);
